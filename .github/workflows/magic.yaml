@@ -1,0 +1,26 @@
+---
+name: Patch
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    permissions:
+      contents: write
+
+    name: 🚀 / release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pack 📦 & release 🚀
+        uses: ./.github/actions/backstage_build_template
