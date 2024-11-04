@@ -39,7 +39,7 @@ runs:
         fi
 
     - name: Create Pull Request
-      if: success() && steps.check-for-file-changes.outcome == 'success'
+      # if: success() && steps.check-for-file-changes.outcome == 'success'
       uses: peter-evans/create-pull-request@v5
       with:
         commit-message: "Automated changes by GitHub Action"
