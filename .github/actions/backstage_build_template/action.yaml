@@ -26,6 +26,7 @@ runs:
         python ${{ github.action_path }}/backstage_build_template.py
 
     - name: Check for File Changes
+      shell: bash
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
