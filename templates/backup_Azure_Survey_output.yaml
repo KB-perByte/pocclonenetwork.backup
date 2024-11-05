@@ -21,22 +21,19 @@ spec:
       seed_cloud_azure_region:
         title: Which Azure region will your Arc servers reside?
         description: Specify the Azure region in which your arc servers reside
-        type: text
-        default: ''
+        type: string
         maxLength: 128
         minLength: 0
       seed_cloud_azure_resource_group_name:
         title: What is the name of your resource group?
         description: Specify the name of the resource group
-        type: text
-        default: ''
+        type: string
         maxLength: 128
         minLength: 0
       seed_cloud_azure_analytics_workspace_name:
         title: What is the name of your Log Analytics Workspace?
         description: Specify your Log Analyticss Workspace
-        type: text
-        default: ''
+        type: string
         maxLength: 128
         minLength: 0
   steps:
