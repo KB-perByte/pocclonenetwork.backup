@@ -42,7 +42,7 @@ runs:
       # if: success() && steps.check-for-file-changes.outcome == 'success'
       uses: peter-evans/create-pull-request@v5
       with:
-        commit-message: "Automated changes by GitHub Action"
-        branch: "automated-changes-branch"  # Define a branch name for the PR
-        title: "Automated Changes"
-        body: "This PR contains automated changes made by GitHub Action."
+        commit-message: "Auto generated backstage templates"
+        branch: "automated-backstage-templates-branch"
+        title: "Automated backstage tempalates for Automation experience surveys"
+        body: "This PR contains backstage tempalates based on Automation experience surveys."
