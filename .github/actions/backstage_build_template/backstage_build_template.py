@@ -61,7 +61,7 @@ def create_all_yaml(experience="ansible"):
     }
 
     # Output file
-    output_file = "generated_ansible_content_templates.yaml"
+    output_file = "all_ansible_automation_experience_templates.yaml"
 
     # Write the data to a YAML file
     with open(output_file, "w") as f:
@@ -178,7 +178,7 @@ def process_json_surveys(json_data, dir_name):
     os.makedirs("templates", exist_ok=True)
 
     # Write YAML output to file in templates directory
-    yaml_file_path = f"templates/{dir_name}_{name_of_survey}_output.yaml"
+    yaml_file_path = f"templates/automation_experience_{dir_name}_{name_of_survey}_template.yaml"
     with open(yaml_file_path, "w") as yaml_file:
         yaml.dump(yaml_final, yaml_file, sort_keys=False)
 
