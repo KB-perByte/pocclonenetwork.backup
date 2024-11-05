@@ -19,8 +19,7 @@ spec:
       seed_network_route:
         title: Route information
         description: Route information
-        type: text
-        default: ''
+        type: string
         maxLength: 128
         minLength: 0
   steps:
