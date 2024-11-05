@@ -1,9 +1,9 @@
 {
-  "name": "Basic Survey",
-  "description": "Basic Survey",
+  "name": "Basic Backup Survey - PoC",
+  "description": "Basic Survey template generation POC",
   "spec": [
     {
-      "question_description": "Route information",
+      "question_description": "Route backup information",
       "min": 0,
       "default": "",
       "max": 128,

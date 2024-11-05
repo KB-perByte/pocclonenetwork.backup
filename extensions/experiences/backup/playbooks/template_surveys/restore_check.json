@@ -1,23 +1,23 @@
 {
-  "name": "Azure Survey",
-  "description": "Azure Survey",
+  "name": "Restore Survey - PoC",
+  "description": "POC template generation from Restore Survey",
   "spec": [
     {
-      "question_description": "Specify the Azure region in which your arc servers reside",
+      "question_description": "Specify the Restore region in which your arc servers reside",
       "required": true,
-      "variable": "seed_cloud_azure_region",
+      "variable": "seed_cloud_restore_region",
       "type": "text",
       "min": 0,
       "default": "",
       "max": 128,
       "choices": "",
       "new_question": true,
-      "question_name": "Which Azure region will your Arc servers reside?"
+      "question_name": "Which restore region will your Arc servers reside?"
     },
     {
       "question_description": "Specify the name of the resource group",
       "required": true,
-      "variable": "seed_cloud_azure_resource_group_name",
+      "variable": "seed_cloud_restore_resource_group_name",
       "type": "text",
       "min": 0,
       "default": "",
@@ -29,7 +29,7 @@
     {
       "question_description": "Specify your Log Analyticss Workspace",
       "required": true,
-      "variable": "seed_cloud_azure_analytics_workspace_name",
+      "variable": "seed_cloud_restore_analytics_workspace_name",
       "type": "text",
       "min": 0,
       "default": "",

@@ -35,10 +35,10 @@ def check_surveys():
             read_json_surveys(dir_path, dir_name)
             # process_json_surveys(survey_specs)
 
-    return survey_specs
+    return survey_specs, dir_name
 
 
-def create_all_yaml():
+def create_all_yaml(experience="ansible"):
     # Define the directory containing template files
     template_dir = "./templates"
 
@@ -54,7 +54,7 @@ def create_all_yaml():
         "apiVersion": "backstage.io/v1alpha1",
         "kind": "Location",
         "metadata": {
-            "name": "ansible-content-templates",
+            "name": f"software-template-for-automation-experience-{experience}",
             "description": "A collection of all Ansible templates",
         },
         "spec": {"targets": template_files},
@@ -93,6 +93,18 @@ def read_json_surveys(base_path, dir_name):
                     print(f"Warning: {filename} is not a valid JSON file and was skipped.")
                 except Exception as e:
                     print(f"Error: Could not read {filename} due to {e}")
+
+
+def get_backstage_type_wrt_app(aap_type):
+    type_data = {
+        "text": "string",
+        "password": "secret",  # need to work
+        "integer": "number",
+        "float": "number",
+        "multiplechoice": "string",
+        "multiselect": "string",
+    }
+    return type_data.get(aap_type)
 
 
 def process_json_surveys(json_data, dir_name):
@@ -150,11 +162,12 @@ def process_json_surveys(json_data, dir_name):
         yaml_data[variable] = {
             "title": question["question_name"],
             "description": question["question_description"],
-            "type": question["type"],
-            "default": question.get("default"),
+            "type": get_backstage_type_wrt_app(question["type"]),
             "maxLength": question.get("max"),
             "minLength": question.get("min"),
         }
+        if question.get("default"):
+            yaml_data[variable]["default"] = question["default"]
         if question.get("required", False):
             required_list.append(variable)
         if question.get("choices"):
@@ -173,7 +186,7 @@ def process_json_surveys(json_data, dir_name):
 
 
 # Call the function to get survey specs
-survey_specs = check_surveys()
-create_all_yaml()
+survey_specs, dir_name = check_surveys()
+create_all_yaml(dir_name)
 # Display the collected survey specs
 print("Collected Survey Specs:", survey_specs)

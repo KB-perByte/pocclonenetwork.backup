@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
   description: A collection of all Ansible templates
-  name: ansible-content-templates-generic-backup
+  name: software-template-for-automation-experience-restore
 spec:
   targets:
   - ./templates/backup_Basic_Survey_output.yaml
