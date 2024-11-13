@@ -1,0 +1,50 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: Network_Restore_Survey
+  title: Network Restore Survey
+  description: Survey to configure network restore options
+  tags:
+  - recommended
+  - ansible
+spec:
+  owner: ansible-authors
+  system: ansible
+  type: service
+  parameters:
+  - title: Provide information about the new component
+    required:
+    - GH_REPO
+    - GH_TOKEN
+    - file_path
+    properties:
+      GH_REPO:
+        title: GitHub Repository URL
+        description: URL of the GitHub repository containing the backup
+        type: string
+        maxLength: null
+        minLength: null
+      GH_TOKEN:
+        title: GitHub Token
+        description: Personal access token for GitHub repository
+        type: secret
+        maxLength: null
+        minLength: null
+      file_path:
+        title: File Path for Restore
+        description: Path to the specific backup file in the GitHub repository
+        type: string
+        maxLength: null
+        minLength: null
+  steps:
+  - id: ansible
+    name: Generating the Ansible Source Code Component
+    action: ansible:rhaap:sync
+    input:
+      repoOwner: ${{ parameters.repoOwner }}
+      repoName: ${{ parameters.repoName }}
+      description: ${{ parameters.description }}
+      collectionGroup: ${{ parameters.collectionGroup }}
+      collectionName: ${{ parameters.collectionName }}
+      applicationType: collection-project
+      sourceControl: ${{ parameters.sourceControl }}

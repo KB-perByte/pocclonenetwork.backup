@@ -1,0 +1,49 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: Restore_Survey_PoC
+  title: Restore Survey PoC
+  description: POC template generation from Restore Survey
+  tags:
+  - recommended
+  - ansible
+spec:
+  owner: ansible-authors
+  system: ansible
+  type: service
+  parameters:
+  - title: Provide information about the new component
+    required:
+    - seed_cloud_restore_region
+    - seed_cloud_restore_resource_group_name
+    properties:
+      seed_cloud_restore_region:
+        title: Which restore region will your Arc servers reside?
+        description: Specify the Restore region in which your arc servers reside
+        type: string
+        maxLength: 128
+        minLength: 0
+      seed_cloud_restore_resource_group_name:
+        title: What is the name of your resource group?
+        description: Specify the name of the resource group
+        type: string
+        maxLength: 128
+        minLength: 0
+      seed_cloud_restore_analytics_workspace_name:
+        title: What is the name of your Log Analytics Workspace?
+        description: Specify your Log Analyticss Workspace
+        type: string
+        maxLength: 128
+        minLength: 0
+  steps:
+  - id: ansible
+    name: Generating the Ansible Source Code Component
+    action: ansible:rhaap:sync
+    input:
+      repoOwner: ${{ parameters.repoOwner }}
+      repoName: ${{ parameters.repoName }}
+      description: ${{ parameters.description }}
+      collectionGroup: ${{ parameters.collectionGroup }}
+      collectionName: ${{ parameters.collectionName }}
+      applicationType: collection-project
+      sourceControl: ${{ parameters.sourceControl }}
