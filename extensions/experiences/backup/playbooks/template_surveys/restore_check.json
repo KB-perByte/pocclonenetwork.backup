@@ -28,7 +28,6 @@
     },
     {
       "question_description": "Specify your Log Analyticss Workspace",
-      "required": true,
       "variable": "seed_cloud_restore_analytics_workspace_name",
       "type": "text",
       "min": 0,
