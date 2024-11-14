@@ -5,7 +5,7 @@ metadata:
   name: software-template-for-automation-experience-restore
 spec:
   targets:
-  - ./templates/automation_experience_backup_Restore_Survey_PoC_template.yaml
   - ./templates/automation_experience_backup_Backup_Survey_PoC_template.yaml
+  - ./templates/automation_experience_backup_Restore_Survey_PoC_template.yaml
   - ./templates/automation_experience_backup_Backup_Configuration_Survey_template.yaml
   - ./templates/automation_experience_backup_Network_Restore_Survey_template.yaml

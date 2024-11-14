@@ -31,7 +31,7 @@
       "question_description": "GitHub username for the repository",
       "variable": "GH_USER",
       "required": true,
-      "default": "rohitthakur2590"
+      "default": "KB-perByte"
     },
     {
       "type": "text",
@@ -39,7 +39,7 @@
       "question_description": "GitHub email associated with the repository",
       "variable": "GH_EMAIL",
       "required": true,
-      "default": "rohitthakur2590@outlook.com"
+      "default": "sagpaul@redhat.com"
     },
     {
       "type": "text",

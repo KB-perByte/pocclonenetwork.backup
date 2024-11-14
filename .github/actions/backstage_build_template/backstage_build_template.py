@@ -109,6 +109,7 @@ def get_backstage_type_wrt_app(aap_type):
 
 def process_json_surveys(json_data, dir_name):
     yaml_data = {}
+    yaml_prop_data = {}
     required_list = []
 
     name = json_data.get("name")
@@ -140,17 +141,15 @@ def process_json_surveys(json_data, dir_name):
             ],
             "steps": [
                 {
-                    "id": "ansible",
-                    "name": "Generating the Ansible Source Code Component",
+                    "id": "ansible portal",
+                    "name": "Invokes the backend scaffolder plugin for Ansible portal exp",
                     "action": "ansible:rhaap:sync",
                     "input": {
-                        "repoOwner": "${{ parameters.repoOwner }}",
-                        "repoName": "${{ parameters.repoName }}",
-                        "description": "${{ parameters.description }}",
-                        "collectionGroup": "${{ parameters.collectionGroup }}",
-                        "collectionName": "${{ parameters.collectionName }}",
-                        "applicationType": "collection-project",
-                        "sourceControl": "${{ parameters.sourceControl }}",
+                        "inventory": "${{ parameters.inventory }}",
+                        "aeConfig": yaml_prop_data,
+                        "organisation": "${{ parameters.organisation }}",
+                        "appType": "automationExperience",
+                        "appName": name_of_survey,
                     },
                 }
             ],
@@ -163,9 +162,11 @@ def process_json_surveys(json_data, dir_name):
             "title": question["question_name"],
             "description": question["question_description"],
             "type": get_backstage_type_wrt_app(question["type"]),
-            "maxLength": question.get("max"),
-            "minLength": question.get("min"),
         }
+        if question.get("max"):
+            yaml_data[variable]["maxLength"] = question["max"]
+        if question.get("min"):
+            yaml_data[variable]["minLength"] = question["min"]
         if question.get("default"):
             yaml_data[variable]["default"] = question["default"]
         if question.get("required", False):
@@ -173,6 +174,19 @@ def process_json_surveys(json_data, dir_name):
         if question.get("choices"):
             yaml_data[variable]["enum"] = question["choices"]
             yaml_data[variable]["enumNames"] = question["choices"]
+
+        yaml_prop_data[variable] = f"${{{{ parameters.{variable} }}}}"
+
+    yaml_data["inventory"] = {
+        "title": "Inventory",
+        "type": "string",
+        "description": "the inventory we point to",
+    }
+    yaml_data["organisation"] = {
+        "title": "Organisation",
+        "type": "string",
+        "description": "the Organisation we point to",
+    }
 
     # Create templates directory if it doesn't exist
     os.makedirs("templates", exist_ok=True)

@@ -24,8 +24,6 @@ spec:
         title: Backup Type
         description: Select the type of backup
         type: string
-        maxLength: null
-        minLength: null
         default: full
         enum: &id001
         - full
@@ -35,44 +33,47 @@ spec:
         title: GitHub Repository URL
         description: URL of the GitHub repository for storing the backup
         type: string
-        maxLength: null
-        minLength: null
       GH_TOKEN:
         title: GitHub Token
         description: Personal access token for GitHub repository
-        type: secret
-        maxLength: null
-        minLength: null
+        type: string
+        ui:field: Secret
       GH_USER:
         title: GitHub Username
         description: GitHub username for the repository
         type: string
-        maxLength: null
-        minLength: null
-        default: rohitthakur2590
+        default: KB-perByte
       GH_EMAIL:
         title: GitHub Email
         description: GitHub email associated with the repository
         type: string
-        maxLength: null
-        minLength: null
-        default: rohitthakur2590@outlook.com
+        default: sagpaul@redhat.com
       backup_file_name:
         title: Backup File Name
         description: Name of the backup file (optional). If not provided, a timestamp
           will be used.
         type: string
-        maxLength: null
-        minLength: null
+      inventory:
+        title: Inventory
+        type: string
+        description: the inventory we point to
+      organisation:
+        title: Organisation
+        type: string
+        description: the Organisation we point to
   steps:
-  - id: ansible
-    name: Generating the Ansible Source Code Component
+  - id: ansible portal
+    name: Invokes the backend scaffolder plugin for Ansible portal exp
     action: ansible:rhaap:sync
     input:
-      repoOwner: ${{ parameters.repoOwner }}
-      repoName: ${{ parameters.repoName }}
-      description: ${{ parameters.description }}
-      collectionGroup: ${{ parameters.collectionGroup }}
-      collectionName: ${{ parameters.collectionName }}
-      applicationType: collection-project
-      sourceControl: ${{ parameters.sourceControl }}
+      inventory: ${{ parameters.inventory }}
+      aeConfig:
+        backup_type: ${{ parameters.backup_type }}
+        GH_REPO: ${{ parameters.GH_REPO }}
+        GH_TOKEN: ${{ parameters.GH_TOKEN }}
+        GH_USER: ${{ parameters.GH_USER }}
+        GH_EMAIL: ${{ parameters.GH_EMAIL }}
+        backup_file_name: ${{ parameters.backup_file_name }}
+      organisation: ${{ parameters.organisation }}
+      appType: automationExperience
+      appName: Backup_Configuration_Survey

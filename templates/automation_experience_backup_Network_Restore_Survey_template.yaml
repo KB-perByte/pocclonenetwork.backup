@@ -22,29 +22,33 @@ spec:
         title: GitHub Repository URL
         description: URL of the GitHub repository containing the backup
         type: string
-        maxLength: null
-        minLength: null
       GH_TOKEN:
         title: GitHub Token
         description: Personal access token for GitHub repository
-        type: secret
-        maxLength: null
-        minLength: null
+        type: string
+        ui:field: Secret
       file_path:
         title: File Path for Restore
         description: Path to the specific backup file in the GitHub repository
         type: string
-        maxLength: null
-        minLength: null
+      inventory:
+        title: Inventory
+        type: string
+        description: the inventory we point to
+      organisation:
+        title: Organisation
+        type: string
+        description: the Organisation we point to
   steps:
-  - id: ansible
-    name: Generating the Ansible Source Code Component
+  - id: ansible portal
+    name: Invokes the backend scaffolder plugin for Ansible portal exp
     action: ansible:rhaap:sync
     input:
-      repoOwner: ${{ parameters.repoOwner }}
-      repoName: ${{ parameters.repoName }}
-      description: ${{ parameters.description }}
-      collectionGroup: ${{ parameters.collectionGroup }}
-      collectionName: ${{ parameters.collectionName }}
-      applicationType: collection-project
-      sourceControl: ${{ parameters.sourceControl }}
+      inventory: ${{ parameters.inventory }}
+      aeConfig:
+        GH_REPO: ${{ parameters.GH_REPO }}
+        GH_TOKEN: ${{ parameters.GH_TOKEN }}
+        file_path: ${{ parameters.file_path }}
+      organisation: ${{ parameters.organisation }}
+      appType: automationExperience
+      appName: Network_Restore_Survey

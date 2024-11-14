@@ -61,7 +61,7 @@ def create_all_yaml(experience="ansible"):
     }
 
     # Output file
-    output_file = "generated_ansible_content_templates.yaml"
+    output_file = "all_ansible_automation_experience_templates.yaml"
 
     # Write the data to a YAML file
     with open(output_file, "w") as f:
@@ -109,6 +109,7 @@ def get_backstage_type_wrt_app(aap_type):
 
 def process_json_surveys(json_data, dir_name):
     yaml_data = {}
+    yaml_prop_data = {}
     required_list = []
 
     name = json_data.get("name")
@@ -140,17 +141,15 @@ def process_json_surveys(json_data, dir_name):
             ],
             "steps": [
                 {
-                    "id": "ansible",
-                    "name": "Generating the Ansible Source Code Component",
+                    "id": "ansible portal",
+                    "name": "Invokes the backend scaffolder plugin for Ansible portal exp",
                     "action": "ansible:rhaap:sync",
                     "input": {
-                        "repoOwner": "${{ parameters.repoOwner }}",
-                        "repoName": "${{ parameters.repoName }}",
-                        "description": "${{ parameters.description }}",
-                        "collectionGroup": "${{ parameters.collectionGroup }}",
-                        "collectionName": "${{ parameters.collectionName }}",
-                        "applicationType": "collection-project",
-                        "sourceControl": "${{ parameters.sourceControl }}",
+                        "inventory": "${{ parameters.inventory }}",
+                        "aeConfig": yaml_prop_data,
+                        "organisation": "${{ parameters.organisation }}",
+                        "appType": "automationExperience",
+                        "appName": name_of_survey,
                     },
                 }
             ],
@@ -158,14 +157,23 @@ def process_json_surveys(json_data, dir_name):
     }
 
     for question in json_data.get("spec", {}):
+        is_secret_va = False
         variable = question["variable"]
         yaml_data[variable] = {
             "title": question["question_name"],
             "description": question["question_description"],
-            "type": get_backstage_type_wrt_app(question["type"]),
-            "maxLength": question.get("max"),
-            "minLength": question.get("min"),
         }
+        if question.get("type"):
+            if question["type"] == "password":
+                yaml_data[variable]["type"] = "string"
+                yaml_data[variable]["ui:field"] = "Secret"
+                is_secret_va = True
+            else:
+                yaml_data[variable]["type"] = get_backstage_type_wrt_app(question["type"])
+        if question.get("max"):
+            yaml_data[variable]["maxLength"] = question["max"]
+        if question.get("min"):
+            yaml_data[variable]["minLength"] = question["min"]
         if question.get("default"):
             yaml_data[variable]["default"] = question["default"]
         if question.get("required", False):
@@ -174,11 +182,27 @@ def process_json_surveys(json_data, dir_name):
             yaml_data[variable]["enum"] = question["choices"]
             yaml_data[variable]["enumNames"] = question["choices"]
 
+        if is_secret_va:
+            yaml_prop_data[variable] = f"${{{{ secrets.{variable} }}}}"
+        else:
+            yaml_prop_data[variable] = f"${{{{ parameters.{variable} }}}}"
+
+    yaml_data["inventory"] = {
+        "title": "Inventory",
+        "type": "string",
+        "description": "the inventory we point to",
+    }
+    yaml_data["organisation"] = {
+        "title": "Organisation",
+        "type": "string",
+        "description": "the Organisation we point to",
+    }
+
     # Create templates directory if it doesn't exist
     os.makedirs("templates", exist_ok=True)
 
     # Write YAML output to file in templates directory
-    yaml_file_path = f"templates/{dir_name}_{name_of_survey}_output.yaml"
+    yaml_file_path = f"templates/automation_experience_{dir_name}_{name_of_survey}_template.yaml"
     with open(yaml_file_path, "w") as yaml_file:
         yaml.dump(yaml_final, yaml_file, sort_keys=False)
 
