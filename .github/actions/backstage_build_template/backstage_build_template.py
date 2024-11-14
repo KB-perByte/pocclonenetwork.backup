@@ -157,12 +157,19 @@ def process_json_surveys(json_data, dir_name):
     }
 
     for question in json_data.get("spec", {}):
+        is_secret_va = False
         variable = question["variable"]
         yaml_data[variable] = {
             "title": question["question_name"],
             "description": question["question_description"],
-            "type": get_backstage_type_wrt_app(question["type"]),
         }
+        if question.get("type"):
+            if question["type"] == "password":
+                yaml_data[variable]["type"] = "string"
+                yaml_data[variable]["ui:field"] = "Secret"
+                is_secret_va = True
+            else:
+                yaml_data[variable]["type"] = get_backstage_type_wrt_app(question["type"])
         if question.get("max"):
             yaml_data[variable]["maxLength"] = question["max"]
         if question.get("min"):
@@ -175,7 +182,10 @@ def process_json_surveys(json_data, dir_name):
             yaml_data[variable]["enum"] = question["choices"]
             yaml_data[variable]["enumNames"] = question["choices"]
 
-        yaml_prop_data[variable] = f"${{{{ parameters.{variable} }}}}"
+        if is_secret_va:
+            yaml_prop_data[variable] = f"${{{{ secrets.{variable} }}}}"
+        else:
+            yaml_prop_data[variable] = f"${{{{ parameters.{variable} }}}}"
 
     yaml_data["inventory"] = {
         "title": "Inventory",
