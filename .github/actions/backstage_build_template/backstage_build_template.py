@@ -93,6 +93,19 @@ def read_json_surveys(base_path, dir_name):
                     print(f"Warning: {filename} is not a valid JSON file and was skipped.")
                 except Exception as e:
                     print(f"Error: Could not read {filename} due to {e}")
+            elif filename.endswith(".yaml") or filename.endswith(".yml"):
+                file_path = os.path.join(directory_path, filename)
+
+                # Attempt to read and parse YAML/YML file
+                try:
+                    with open(file_path, "r") as yaml_file:
+                        data = yaml.safe_load(yaml_file)
+                        process_json_surveys(data, dir_name)
+                        # all_data.append(data)
+                except json.JSONDecodeError:
+                    print(f"Warning: {filename} is not a valid YAML file and was skipped.")
+                except Exception as e:
+                    print(f"Error: Could not read {filename} due to {e}")
 
 
 def get_backstage_type_wrt_app(aap_type):
@@ -147,7 +160,7 @@ def process_json_surveys(json_data, dir_name):
                     "input": {
                         "inventory": "${{ parameters.inventory }}",
                         "aeConfig": yaml_prop_data,
-                        "organisation": "${{ parameters.organisation }}",
+                        "organization": "${{ parameters.organization }}",
                         "appType": "automationExperience",
                         "appName": name_of_survey,
                     },
@@ -192,10 +205,10 @@ def process_json_surveys(json_data, dir_name):
         "type": "string",
         "description": "the inventory we point to",
     }
-    yaml_data["organisation"] = {
-        "title": "Organisation",
+    yaml_data["organization"] = {
+        "title": "organization",
         "type": "string",
-        "description": "the Organisation we point to",
+        "description": "the organization we point to",
     }
 
     # Create templates directory if it doesn't exist
